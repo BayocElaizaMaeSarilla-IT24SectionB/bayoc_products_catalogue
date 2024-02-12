@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product List</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="container">
+        <h1 class="display-4">Bayoc-Product-Catalogue</h1>
+           
+        <!-- Product list -->
+        <ul id="product-list" class="list-group"></ul>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Get the product list container
+            const productListContainer = document.getElementById("product-list");
+
+            // Sample products as JavaScript objects
+            const productsData = [
+                { name: 'Maxx', price: 60, id: 1, image: 'https://imgs.search.brave.com/mEqQsxNTFWiwQSgHGBdWnOznM7c64ycG7LmlECJjRjw/rs:fit:860:0:0/g:ce/aHR0cHM6Ly93d3cu/c2FyYXBub3cuY29t/L2Nkbi9zaG9wL3By/b2R1Y3RzL21heHgt/Y2FuZHktc2luZ2xl/LW1heHgtbWVudGhv/bC1jYW5keS1ob25l/eS1tYW5zaS0yODk1/MTIwODgyMDgyMy5w/bmc_dj0xNjQ4NzQ3/MzI0JndpZHRoPTUw/MA' },
+                { name: 'Snowbeer', price: 120, id: 2, image: 'https://imgs.search.brave.com/WwVZ18okUrpFPjpiGPM8Cn6p2tQRb_xITKOFU_X-psY/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9pbmRh/eXNvbmxpbmVzYXJp/c2FyaXN0b3JlLmNv/bS9jZG4vc2hvcC9w/cm9kdWN0cy9pbWFn/ZV8yYzg4ZGM3MS02/YjAzLTRmMGItYTUz/MC0xOGQ4MzAxODk0/NTEuanBnP3Y9MTY0/NjU5ODU0NiZ3aWR0/aD0xNDQ1' },
+                { name: 'WhiteRabbit', price: 85, id: 3, image:' https://imgs.search.brave.com/v8ZSrG6XoF8nS76_XPT8jOUAGpcwh_ctgiyeVPFpZBQ/rs:fit:860:0:0/g:ce/aHR0cHM6Ly9tLm1l/ZGlhLWFtYXpvbi5j/b20vaW1hZ2VzL0kv/NTFqVVhpLVgtc0wu/anBn' },
+                { name: 'Gummy', price: 90, id: 4, image: 'https://imgs.search.brave.com/pxW4PZFeDLeMbhtz0xsDRXhLXVRbjjENGuwroM0lzgw/rs:fit:500:0:0/g:ce/aHR0cHM6Ly9jYW5k/eWZ1bmhvdXNlLmNh/L2Nkbi9zaG9wL2Zp/bGVzL2NhbmR5LWZ1/bmhvdXNlLWd1bW15/LWNhbmR5LmpwZz92/PTE2OTE1MDAxNzEm/d2lkdGg9OTUw' }
+            ];
+
+            // Function to render product list
+            function renderProducts(products) {
+                productListContainer.innerHTML = "";
+                products.forEach(product => {
+                    const listItem = document.createElement("li");
+                    listItem.classList.add("list-group-item"); // Bootstrap class for list items
+                    listItem.innerHTML = `
+                        <img src="${product.image}" alt="${product.name}" width="100">
+                        <strong>${product.name}</strong><br>
+                        Price: $${product.price.toFixed(2)}<br>
+                        ID: ${product.id}<br>
+                        <button class="btn btn-primary" onclick="addToCart(${product.id})">Add to Cart</button>
+                        <span id="click-count-${product.id}">0</span> clicks
+                    `;
+                    productListContainer.appendChild(listItem);
+                });
+            }
+
+            // Initial render
+            renderProducts(productsData);
+
+            // Counter for each product
+            const clickCounter = {};
+
+            // Function to handle "Add to Cart" button click
+            window.addToCart = function (productId) {
+                if (!clickCounter[productId]) {
+                    clickCounter[productId] = 0;
+                }
+                clickCounter[productId]++;
+                const clickCountElement = document.getElementById(`click-count-${productId}`);
+                clickCountElement.textContent = `${clickCounter[productId]} clicks`;
+            };
+
+            // Filter products function
+            window.filterProducts = function (filterType) {
+                switch (filterType) {
+                    case 'all':
+                        renderProducts(productsData);
+                        break;
+                    case 'price':
+                        productsData.sort((a, b) => a.price - b.price);
+                        renderProducts(productsData);
+                        break;
+                    default:
+                        console.error('Invalid filter type');
+                }
+            };
+        });
+    </script>
+    <!-- Bootstrap JavaScript and Popper.js (required for Bootstrap's JavaScript plugins) -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
